@@ -2,8 +2,10 @@ package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Role;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
@@ -28,6 +31,8 @@ public class MemberController {
     @PostMapping("/members/new")
     public String create(@Valid MemberForm form, BindingResult result) {
 
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+
         if (result.hasErrors()) {
             return "members/createMemberForm";
         }
@@ -35,8 +40,12 @@ public class MemberController {
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
         Member member = new Member();
+        member.setRealId(form.getRealId());
+        member.setPassword(encodedPassword);
         member.setName(form.getName());
+        member.setPhone(form.getPhone());
         member.setAddress(address);
+        member.setRole(Role.ADMIN);
 
         memberService.join(member);
         return "redirect:/";

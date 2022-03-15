@@ -15,10 +15,20 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(name = "member_real_id")
+    private String realId;
+
     private String name;
+
+    private String password;
+
+    private String phone;
 
     @Embedded
     private Address address;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
