@@ -5,4 +5,6 @@
         <li><a href="/">Home</a></li>
     </ul>
     <a href="/"><h3 class="text-muted">HELLO SHOP</h3></a>
+    <span th:if="${session.loginMember == null}"><a href="/login">Login</a></span>
+    <span th:unless="${session.loginMember == null}"><a href="/logout">Logout</a></span>
 </div>

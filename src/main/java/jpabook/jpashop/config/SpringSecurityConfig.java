@@ -1,5 +1,6 @@
 package jpabook.jpashop.config;
 
+import jpabook.jpashop.domain.Role;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -36,7 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/members/new").permitAll()
-                .antMatchers("/admin").hasAnyAuthority("ADMIN")
+                .antMatchers("/admin").hasAnyAuthority(Role.ADMIN.getKey())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
