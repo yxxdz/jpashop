@@ -34,4 +34,10 @@ public class MemberRepository {
                 .setParameter("name", name)
                 .getResultList();
     }
+
+    public List<Member> findById(String realId) {
+        return em.createQuery("select m from Member m where m.realId = :realId", Member.class)
+                .setParameter("realId", realId)
+                .getResultList();
+    }
 }

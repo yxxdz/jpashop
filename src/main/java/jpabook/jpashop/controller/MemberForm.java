@@ -1,5 +1,6 @@
 package jpabook.jpashop.controller;
 
+import jpabook.jpashop.domain.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +29,6 @@ public class MemberForm {
 
     @NotEmpty(message = "필수 입력 항목입니다.")
     private String zipcode;
+
+    private Role role;
 }

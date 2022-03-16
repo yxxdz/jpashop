@@ -1,9 +1,13 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.AccountContext;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +16,10 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final AccountRepository accountRepository;
 
     // 회원 가입
     @Transactional
@@ -26,7 +31,7 @@ public class MemberService {
     }
     
     private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
+        List<Member> findMembers = memberRepository.findById(member.getRealId());
         if(!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
@@ -39,5 +44,12 @@ public class MemberService {
 
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String realId) throws UsernameNotFoundException {
+
+        return accountRepository.findByRealId(realId)
+                .orElseThrow(() -> new UsernameNotFoundException("일치하는 회원 정보가 없습니다."));
     }
 }

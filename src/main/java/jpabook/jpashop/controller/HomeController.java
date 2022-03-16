@@ -13,4 +13,9 @@ public class HomeController {
         log.info("home controller");
         return "home";
     }
+
+    @RequestMapping("/admin")
+    public String adminPage() {
+        return "/admin";
+    }
 }
