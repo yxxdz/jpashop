@@ -1,8 +1,6 @@
 package jpabook.jpashop.config;
 
 import jpabook.jpashop.domain.Role;
-import jpabook.jpashop.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -23,8 +21,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         session.setAttribute("loginMember", authentication.getAuthorities().toString());
 
         if (authentication.getAuthorities().toString().contains(Role.ADMIN.getKey())) {
+            session.setAttribute("auth", Role.ADMIN.getKey());
             setDefaultTargetUrl("/admin");
         } else {
+            session.setAttribute("auth", Role.USER.getKey());
             setDefaultTargetUrl("/");
         }
 
