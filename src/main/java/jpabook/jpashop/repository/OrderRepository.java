@@ -1,6 +1,11 @@
 package jpabook.jpashop.repository;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.QMember;
+import jpabook.jpashop.domain.QOrder;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
@@ -17,6 +22,7 @@ import java.util.List;
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
     public void save(Order order) { em.persist(order); }
 
@@ -42,7 +48,7 @@ public class OrderRepository {
         }
 
         // 회원 이름 검색
-        if(StringUtils.hasText(orderSearch.getMemberName())) {
+        if(StringUtils.hasText(orderSearch.getMemberId())) {
             if(isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
@@ -59,8 +65,8 @@ public class OrderRepository {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
 
-        if(StringUtils.hasText(orderSearch.getMemberName())) {
-            query = query.setParameter("name", orderSearch.getMemberName());
+        if(StringUtils.hasText(orderSearch.getMemberId())) {
+            query = query.setParameter("name", orderSearch.getMemberId());
         }
 
         return query.getResultList();
@@ -84,9 +90,9 @@ public class OrderRepository {
         }
 
         // 회원 이름 검색
-        if (StringUtils.hasText(orderSearch.getMemberName())) {
+        if (StringUtils.hasText(orderSearch.getMemberId())) {
            Predicate name =
-                    cb.like(m.<String>get("name"), "%" + orderSearch.getMemberName() + "%");
+                    cb.like(m.<String>get("name"), "%" + orderSearch.getMemberId() + "%");
            criteria.add(name);
         }
 
@@ -95,4 +101,24 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    /**
+     * querydsl 추가
+     */
+    public List<Order> findAllByQuerydsl(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(orderSearch.getOrderStatus() != null) {
+            builder.and(order.status.eq(orderSearch.getOrderStatus()));
+        }
+
+        if(StringUtils.hasText(orderSearch.getMemberId())) {
+            builder.and(order.member.realId.contains(orderSearch.getMemberId()));
+        }
+
+        return queryFactory.selectFrom(order)
+                .where(builder)
+                .fetch();
+    }
 }
