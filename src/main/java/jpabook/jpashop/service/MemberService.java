@@ -51,4 +51,6 @@ public class MemberService implements UserDetailsService {
         return accountRepository.findByRealId(realId)
                 .orElseThrow(() -> new UsernameNotFoundException("일치하는 회원 정보가 없습니다."));
     }
+
+    public Member findOneById(String realId) {return memberRepository.findOneById(realId);}
 }

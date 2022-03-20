@@ -73,10 +73,10 @@ public class MemberController {
         member.setRole(Role.USER);
 
         memberService.join(member);
-        return "redirect:/";
+        return "redirect:/login";
     }
 
-    @GetMapping("/members")
+    @GetMapping("/admin/members")
     public String list(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);

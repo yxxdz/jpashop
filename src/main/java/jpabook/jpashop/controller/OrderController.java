@@ -34,6 +34,21 @@ public class OrderController {
         return "order/orderForm";
     }
 
+    // 상품 목록에서 바로 주문 누르기 추가
+    @GetMapping("/order/{itemId}")
+    public String createOneForm(Model model,
+                                @PathVariable("itemId") Long itemId) {
+
+//        List<Member> members = memberService.findMembers();
+        List<Item> items = itemService.findItems();
+
+//        model.addAttribute("members", members);
+        model.addAttribute("items", items);
+        model.addAttribute("itemId", itemId);
+
+        return "order/orderForm";
+    }
+
     @PostMapping("/order")
     public String order(@RequestParam("memberId") Long memberId,
                         @RequestParam("itemId") Long itemId,
