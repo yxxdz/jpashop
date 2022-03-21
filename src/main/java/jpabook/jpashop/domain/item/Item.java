@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain.item;
 
 import jpabook.jpashop.domain.Category;
+import jpabook.jpashop.exception.CustomException;
 import jpabook.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static jpabook.jpashop.exception.ErrorCode.NEED_MORE_STOCK;
+import static jpabook.jpashop.exception.ErrorCode.VALIDATE_DUPLICATE_ID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -41,8 +45,8 @@ public abstract class Item {
     public void removeStock(int quantity) {
         int restStock = this.stockQuantity - quantity;
         if(restStock < 0) {
-            throw new NotEnoughStockException("need more stock");
-        }
+            throw new CustomException(NEED_MORE_STOCK);
+    }
         this.stockQuantity = restStock;
     }
 }

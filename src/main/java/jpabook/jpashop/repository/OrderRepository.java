@@ -3,9 +3,8 @@ package jpabook.jpashop.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.QMember;
-import jpabook.jpashop.domain.QOrder;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
@@ -120,5 +119,23 @@ public class OrderRepository {
         return queryFactory.selectFrom(order)
                 .where(builder)
                 .fetch();
+    }
+
+    // 개인 주문 목록
+    public List<Order> findOrders(Long memberId) {
+        QOrder order = QOrder.order;
+
+        return queryFactory.selectFrom(order)
+                .where(order.member.id.eq(memberId))
+                .fetch();
+    }
+
+    public void changeDeliveryStatus(Long deliveryId) {
+        QDelivery delivery = QDelivery.delivery;
+
+        queryFactory.update(delivery)
+                .set(delivery.status, DeliveryStatus.COMP)
+                .where(delivery.id.eq(deliveryId))
+                .execute();
     }
 }

@@ -14,7 +14,8 @@
             <a th:if="${session.loginMember == null}" class="btn btn-lg btn-secondary" href="/login">로그인</a>
             <a th:unless="${session.loginMember == null}" class="btn btn-lg btn-secondary" href="/logout">로그아웃</a>
             <a th:if="${session.loginMember == null}" class="btn btn-lg btn-secondary" href="/members/new">회원 가입</a>
-            <a th:unless="${session.loginMember == null}" class="btn btn-lg btn-secondary" href="/orders">주문 내역</a>
+            <a th:unless="${session.loginMember == null}" class="btn btn-lg btn-secondary" href="#"
+               th:href="@{/orders/{id} (id=${session.loginMember.id})}">주문 내역</a>
         </p>
         <p class="lead">주문 기능</p>
         <p>

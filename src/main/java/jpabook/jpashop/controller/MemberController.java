@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
+import static jpabook.jpashop.domain.Role.USER;
+
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -70,7 +72,7 @@ public class MemberController {
         member.setName(form.getName());
         member.setPhone(form.getPhone());
         member.setAddress(address);
-        member.setRole(Role.USER);
+        member.setRole(USER);
 
         memberService.join(member);
         return "redirect:/login";

@@ -1,6 +1,8 @@
 package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.exception.CustomException;
+import jpabook.jpashop.exception.ErrorCode;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static jpabook.jpashop.exception.ErrorCode.VALIDATE_DUPLICATE_ID;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,7 +36,7 @@ public class MemberService implements UserDetailsService {
     private void validateDuplicateMember(Member member) {
         List<Member> findMembers = memberRepository.findById(member.getRealId());
         if(!findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new CustomException(VALIDATE_DUPLICATE_ID);
         }
     }
 

@@ -39,10 +39,8 @@ public class OrderController {
     public String createOneForm(Model model,
                                 @PathVariable("itemId") Long itemId) {
 
-//        List<Member> members = memberService.findMembers();
         List<Item> items = itemService.findItems();
 
-//        model.addAttribute("members", members);
         model.addAttribute("items", items);
         model.addAttribute("itemId", itemId);
 
@@ -66,9 +64,26 @@ public class OrderController {
         return "order/orderList";
     }
 
+    // 회원 주문 목록 추가
+    @PostMapping("/orders/{memberId}")
+    public String orderList(@PathVariable("memberId") Long memberId,
+                               Model model) {
+
+        List<Order> orders = orderService.findOrders(memberId);
+        model.addAttribute("orders", orders);
+
+        return "order/orderList";
+    }
+
     @PostMapping("/orders/{orderId}/cancel")
     public String cancelOrder(@PathVariable("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
+        return "redirect:/orders";
+    }
+
+    @PostMapping("/orders/{deliveryId}/delivery")
+    public String changeDeliveryStatus(@PathVariable("deliveryId") Long deliveryId) {
+        orderService.changeDeliveryStatus(deliveryId);
         return "redirect:/orders";
     }
 }
