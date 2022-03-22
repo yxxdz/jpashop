@@ -31,7 +31,7 @@
                 <td th:text="${item.delivery.status}"></td>
                 <td>
                     <a th:if="${item.status.name() == 'ORDER'}" href="#"
-                       th:href="'javascript:cancel('+${item.id}+')'"
+                       th:href="'javascript:cancel('+${item.id}+',' + ${session.loginMember.id} + ')'"
                        class="btn btn-danger">CANCEL</a>
                 </td>
             </tr>
@@ -42,11 +42,18 @@
 </div> <!-- /container -->
 </body>
 <script>
-    function cancel(id) {
+    function cancel(orderId, memberId) {
         if (confirm("주문을 취소하시겠습니까?")) {
             var form = document.createElement("form");
             form.setAttribute("method", "post");
-            form.setAttribute("action", "/orders/" + id + "/cancel");
+            form.setAttribute("action", "/orders/" + orderId + "/cancel");
+
+            var input = document.createElement("input");
+            input.setAttribute("type", "hidden");
+            input.setAttribute("name", "memberId");
+            input.setAttribute("value", memberId);
+
+            form.appendChild(input);
             document.body.appendChild(form);
             form.submit();
         }
