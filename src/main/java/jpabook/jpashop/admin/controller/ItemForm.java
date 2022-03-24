@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class BookForm {
+public class ItemForm {
 
     private Long id;
 
@@ -12,6 +12,15 @@ public class BookForm {
     private int price;
     private int stockQuantity;
 
+    // Album
+    private String artist;
+    private String etc;
+
+    //  Book
     private String author;
     private String isbn;
+
+    // Movie
+    private String director;
+    private String actor;
 }

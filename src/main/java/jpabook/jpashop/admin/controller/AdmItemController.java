@@ -1,8 +1,11 @@
 package jpabook.jpashop.admin.controller;
 
 import jpabook.jpashop.admin.service.AdmItemService;
+import jpabook.jpashop.common.domain.Category;
+import jpabook.jpashop.common.domain.item.Album;
 import jpabook.jpashop.common.domain.item.Book;
 import jpabook.jpashop.common.domain.item.Item;
+import jpabook.jpashop.common.domain.item.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -19,29 +23,64 @@ public class AdmItemController {
 
     private final AdmItemService itemService;
 
+    @GetMapping("/admin/items/types")
+    public String selectDType(Model model) {
+        return "admin/items/selectDType";
+    }
+
     @GetMapping("/admin/items/new")
-    public String createForm(Model model) {
-        model.addAttribute("form", new BookForm());
+    public String createBookForm(HttpServletRequest request, Model model) {
+
+        String dtype = request.getParameter("dtype");
+
+        model.addAttribute("dtype", dtype);
+        model.addAttribute("form", new ItemForm());
         return "admin/items/createItemForm";
     }
 
     @PostMapping("/admin/items/new")
-    public String create(BookForm form) {
+    public String createBook(HttpServletRequest request, ItemForm form) {
 
-        Book book = new Book();
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setAuthor(form.getAuthor());
-        book.setIsbn(form.getIsbn());
+        String dtype = request.getParameter("dtype");
 
-        itemService.saveItem(book);
+        if (dtype.equals("A")) {
+            Album album = new Album();
+            album.setName(form.getName());
+            album.setPrice(form.getPrice());
+            album.setStockQuantity(form.getStockQuantity());
+            album.setArtist(form.getArtist());
+            album.setEtc(form.getEtc());
+
+            itemService.saveItem(album);
+
+        } else if (dtype.equals("B")) {
+            Book book = new Book();
+            book.setName(form.getName());
+            book.setPrice(form.getPrice());
+            book.setStockQuantity(form.getStockQuantity());
+            book.setAuthor(form.getAuthor());
+            book.setIsbn(form.getIsbn());
+
+            itemService.saveItem(book);
+
+        } else if (dtype.equals("M")) {
+            Movie movie = new Movie();
+            movie.setName(form.getName());
+            movie.setPrice(form.getPrice());
+            movie.setStockQuantity(form.getStockQuantity());
+            movie.setDirector(form.getDirector());
+            movie.setActor(form.getActor());
+
+            itemService.saveItem(movie);
+        }
+
         return "redirect:/admin/items";
     }
 
     @GetMapping("/admin/items")
     public String list(Model model) {
         List<Item> items = itemService.findItems();
+
         model.addAttribute("items", items);
         return "admin/items/admItemList";
     }
@@ -50,7 +89,7 @@ public class AdmItemController {
     public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
         Book item = (Book) itemService.findOne(itemId);
 
-        BookForm form = new BookForm();
+        ItemForm form = new ItemForm();
         form.setId(item.getId());
         form.setName(item.getName());
         form.setPrice(item.getPrice());
@@ -63,7 +102,7 @@ public class AdmItemController {
     }
 
     @PostMapping("/admin/items/{itemId}/edit")
-    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") ItemForm form) {
 
         itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
 

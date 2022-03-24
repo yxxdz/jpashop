@@ -1,6 +1,7 @@
 package jpabook.jpashop.admin.service;
 
 import jpabook.jpashop.admin.repository.AdmItemRepository;
+import jpabook.jpashop.common.domain.Category;
 import jpabook.jpashop.common.domain.item.Item;
 import jpabook.jpashop.user.repository.UsrItemRepository;
 import lombok.RequiredArgsConstructor;
