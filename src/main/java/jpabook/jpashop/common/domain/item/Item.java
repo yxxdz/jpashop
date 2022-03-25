@@ -21,6 +21,9 @@ public abstract class Item {
     @Column(name = "item_id")
     private Long id;
 
+    @Column(name = "dtype", insertable=false, updatable = false)
+    private String dtype;
+
     private String name;
     private int price;
     private int stockQuantity;

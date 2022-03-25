@@ -9,7 +9,7 @@
             <thead>
             <tr>
                 <th>#</th>
-                <!--<th>분류</th>-->
+                <th>분류</th>
                 <th>상품명</th>
                 <th>가격</th>
                 <th>재고수량</th>
@@ -19,12 +19,14 @@
             <tbody>
             <tr th:each="item : ${items}">
                 <td th:text="${item.id}"></td>
-                <!--<td></td>-->
+                <td th:if="${item.dtype == 'A'}">음반</td>
+                <td th:if="${item.dtype == 'B'}">도서</td>
+                <td th:if="${item.dtype == 'M'}">영화</td>
                 <td th:text="${item.name}"></td>
                 <td th:text="${item.price}"></td>
                 <td th:text="${item.stockQuantity}"></td>
                 <td>
-                    <a href="#" th:href="@{/admin/items/{id}/edit (id=${item.id})}"
+                    <a href="#" th:href="@{/admin/items/{type}/{id}/edit (type=${item.dtype}, id=${item.id})}"
                        class="btn btn-primary" role="button">수정</a>
                 </td>
             </tr>

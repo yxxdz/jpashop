@@ -27,13 +27,13 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>회원명</th>
+                <th>회원 아이디</th>
                 <th>대표상품 이름</th>
                 <th>대표상품 주문가격</th>
                 <th>대표상품 주문수량</th>
                 <th>주문상태</th>
                 <th>일시</th>
-                <th th:if="${session.auth == 'ROLE_ADMIN'}">배송상태</th>
+                <th>배송상태</th>
                 <th></th>
             </tr>
             </thead>
@@ -46,17 +46,13 @@
                 <td th:text="${item.orderItems[0].count}"></td>
                 <td th:text="${item.status}"></td>
                 <td th:text="${item.orderDate}"></td>
-                <td th:if="${session.auth == 'ROLE_ADMIN'}" th:text="${item.delivery.status}"></td>
-                <td th:unless="${session.auth == 'ROLE_ADMIN'}"></td>
-                <td th:if="${session.auth == 'ROLE_ADMIN'}">
-                    <a th:if="${item.delivery.status.name() != 'COMP'}" href="#"
+                <td th:if="${item.status.name() != 'CANCEL'}" th:text="${item.delivery.status}"></td>
+                <td th:unless="${item.status.name() != 'CANCEL'}"></td>
+                <td>
+                    <a th:if="${item.delivery.status.name() != 'COMP'
+                            and item.status.name() == 'ORDER'}" href="#"
                        th:href="'javascript:delivery('+${item.delivery.id}+')'"
                        class="btn btn-danger">완료</a>
-                </td>
-                <td th:unless="${session.auth == 'ROLE_ADMIN'}">
-                    <a th:if="${item.status.name() == 'ORDER'}" href="#"
-                       th:href="'javascript:cancel('+${item.id}+')'"
-                       class="btn btn-danger">CANCEL</a>
                 </td>
             </tr>
             </tbody>
@@ -80,7 +76,7 @@
         if (confirm("배송 완료로 변경하시겠습니까?")) {
             var form = document.createElement("form");
             form.setAttribute("method", "post");
-            form.setAttribute("action", "/orders/" + id + "/delivery");
+            form.setAttribute("action", "/admin/orders/delivery/" + id);
             document.body.appendChild(form);
             form.submit();
         }

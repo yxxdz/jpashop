@@ -7,6 +7,7 @@ import jpabook.jpashop.common.domain.item.Book;
 import jpabook.jpashop.common.domain.item.Item;
 import jpabook.jpashop.common.domain.item.Movie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,24 +86,59 @@ public class AdmItemController {
         return "admin/items/admItemList";
     }
 
-    @GetMapping("/admin/items/{itemId}/edit")
-    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
-        Book item = (Book) itemService.findOne(itemId);
+    @GetMapping("/admin/items/{dtype}/{itemId}/edit")
+    public String updateItemForm(@PathVariable("itemId") Long itemId,
+                                 @PathVariable("dtype")String dtype,
+                                 Model model) {
 
-        ItemForm form = new ItemForm();
-        form.setId(item.getId());
-        form.setName(item.getName());
-        form.setPrice(item.getPrice());
-        form.setStockQuantity(item.getStockQuantity());
-        form.setAuthor(item.getAuthor());
-        form.setIsbn(item.getIsbn());
+        if (dtype.equals("A")) {
+            Album item = (Album) itemService.findOne(itemId);
 
-        model.addAttribute("form", form);
+            ItemForm form = new ItemForm();
+            form.setId(item.getId());
+            form.setName(item.getName());
+            form.setPrice(item.getPrice());
+            form.setStockQuantity(item.getStockQuantity());
+            form.setArtist(item.getArtist());
+            form.setEtc(item.getEtc());
+
+            model.addAttribute("form", form);
+
+        } else if (dtype.equals("B")) {
+            Book item = (Book) itemService.findOne(itemId);
+
+            ItemForm form = new ItemForm();
+            form.setId(item.getId());
+            form.setName(item.getName());
+            form.setPrice(item.getPrice());
+            form.setStockQuantity(item.getStockQuantity());
+            form.setAuthor(item.getAuthor());
+            form.setIsbn(item.getIsbn());
+
+            model.addAttribute("form", form);
+
+        } else if (dtype.equals("M")) {
+            Movie item = (Movie) itemService.findOne(itemId);
+
+            ItemForm form = new ItemForm();
+            form.setId(item.getId());
+            form.setName(item.getName());
+            form.setPrice(item.getPrice());
+            form.setStockQuantity(item.getStockQuantity());
+            form.setDirector(item.getDirector());
+            form.setActor(item.getActor());
+
+            model.addAttribute("form", form);
+
+        }
+
         return "admin/items/updateItemForm";
     }
 
-    @PostMapping("/admin/items/{itemId}/edit")
-    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") ItemForm form) {
+    @PostMapping("/admin/items/{dtype}/{itemId}/edit")
+    public String updateItem(@PathVariable Long itemId,
+                             @PathVariable("dtype")String dtype,
+                             @ModelAttribute("form") ItemForm form) {
 
         itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
 
