@@ -34,7 +34,7 @@
                 <th>주문상태</th>
                 <th>일시</th>
                 <th>배송상태</th>
-                <th></th>
+                <th>배송변경</th>
             </tr>
             </thead>
             <tbody>
@@ -49,9 +49,14 @@
                 <td th:if="${item.status.name() != 'CANCEL'}" th:text="${item.delivery.status}"></td>
                 <td th:unless="${item.status.name() != 'CANCEL'}"></td>
                 <td>
-                    <a th:if="${item.delivery.status.name() != 'COMP'
+                    <a th:if="${item.delivery.status == null
                             and item.status.name() == 'ORDER'}" href="#"
-                       th:href="'javascript:delivery('+${item.delivery.id}+')'"
+                       th:href="'javascript:delivery('+${item.delivery.id}+',' + '\''+ 'READY' + '\'' + ')'"
+                       class="btn btn-danger">준비</a>
+
+                    <a th:if="${item.delivery.status != null and item.delivery.status.name() == 'READY'
+                            and item.status.name() == 'ORDER'}" href="#"
+                       th:href="'javascript:delivery('+${item.delivery.id}+','  + '\''+ 'COMP' + '\'' + ')'"
                        class="btn btn-danger">완료</a>
                 </td>
             </tr>
@@ -72,11 +77,18 @@
         }
     }
 
-    function delivery(id) {
-        if (confirm("배송 완료로 변경하시겠습니까?")) {
+    function delivery(id, status) {
+        if (confirm("배송 상태를 변경하시겠습니까?")) {
             var form = document.createElement("form");
             form.setAttribute("method", "post");
             form.setAttribute("action", "/admin/orders/delivery/" + id);
+
+            var input = document.createElement("input");
+            input.setAttribute("type", "hidden");
+            input.setAttribute("name", "status");
+            input.setAttribute("value", status);
+
+            form.appendChild(input);
             document.body.appendChild(form);
             form.submit();
         }

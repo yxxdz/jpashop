@@ -119,12 +119,23 @@ public class AdmOrderRepository {
                 .fetch();
     }
 
-    public void changeDeliveryStatus(Long deliveryId) {
+    public void changeDeliveryStatus(Long deliveryId, String status) {
         QDelivery delivery = QDelivery.delivery;
 
-        queryFactory.update(delivery)
-                .set(delivery.status, DeliveryStatus.COMP)
-                .where(delivery.id.eq(deliveryId))
-                .execute();
+        if (status.equals("READY")) {
+            queryFactory.update(delivery)
+                    .set(delivery.status, DeliveryStatus.READY)
+                    .where(delivery.id.eq(deliveryId))
+                    .execute();
+
+        } else if (status.equals("COMP")) {
+            queryFactory.update(delivery)
+                    .set(delivery.status, DeliveryStatus.COMP)
+                    .where(delivery.id.eq(deliveryId))
+                    .execute();
+
+        }
+
+
     }
 }

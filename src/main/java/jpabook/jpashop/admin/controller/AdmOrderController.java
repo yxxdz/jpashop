@@ -4,6 +4,8 @@ import jpabook.jpashop.admin.repository.OrderSearch;
 import jpabook.jpashop.admin.service.AdmItemService;
 import jpabook.jpashop.admin.service.AdmMemberService;
 import jpabook.jpashop.admin.service.AdmOrderService;
+import jpabook.jpashop.common.domain.Delivery;
+import jpabook.jpashop.common.domain.DeliveryStatus;
 import jpabook.jpashop.common.domain.Order;
 
 import lombok.RequiredArgsConstructor;
@@ -28,8 +30,10 @@ public class AdmOrderController {
     }
 
     @PostMapping("/admin/orders/delivery/{deliveryId}")
-    public String changeDeliveryStatus(@PathVariable("deliveryId") Long deliveryId) {
-        orderService.changeDeliveryStatus(deliveryId);
+    public String changeDeliveryStatus(@PathVariable("deliveryId") Long deliveryId,
+                                       @RequestParam("status") String status) {
+
+        orderService.changeDeliveryStatus(deliveryId, status);
         return "redirect:/admin/orders";
     }
 }

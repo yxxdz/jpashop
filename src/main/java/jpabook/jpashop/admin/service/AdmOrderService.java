@@ -26,7 +26,7 @@ public class AdmOrderService {
     }
 
     @Transactional
-    public void changeDeliveryStatus(Long deliveryId) {
-        orderRepository.changeDeliveryStatus(deliveryId);
+    public void changeDeliveryStatus(Long deliveryId, String status) {
+        orderRepository.changeDeliveryStatus(deliveryId, status);
     }
 }
