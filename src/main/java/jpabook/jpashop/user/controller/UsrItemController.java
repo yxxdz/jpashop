@@ -21,8 +21,6 @@ public class UsrItemController {
     public String list(@RequestParam(name = "category", required = false) String category,
                        Model model) {
 
-        System.out.println("category = " + category);
-
         if (category != null && !category.equals("")) {
             List<Item> items = itemService.findItems(category);
             model.addAttribute("items", items);

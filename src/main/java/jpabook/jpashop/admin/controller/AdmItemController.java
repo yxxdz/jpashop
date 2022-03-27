@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -79,10 +76,21 @@ public class AdmItemController {
     }
 
     @GetMapping("/admin/items")
-    public String list(Model model) {
-        List<Item> items = itemService.findItems();
+    public String list(@RequestParam(name = "category", required = false) String category,
+                       Model model) {
 
-        model.addAttribute("items", items);
+        if (category != null && !category.equals("")) {
+            List<Item> items = itemService.findItems(category);
+            model.addAttribute("items", items);
+            model.addAttribute("selectCategory", category);
+        } else {
+            List<Item> items = itemService.findItems();
+            model.addAttribute("items", items);
+        }
+
+
+        List<Category> categories = itemService.findCategories();
+        model.addAttribute("categories", categories);
         return "admin/items/admItemList";
     }
 

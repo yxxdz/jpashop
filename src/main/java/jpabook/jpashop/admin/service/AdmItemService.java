@@ -32,6 +32,14 @@ public class AdmItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findItems(String category) {
+        return itemRepository.findAll(category);
+    }
+
+    public List<Category> findCategories() {
+        return itemRepository.findCategories();
+    }
+
     public Item findOne(Long itemId) {
         return itemRepository.findOne(itemId);
     }

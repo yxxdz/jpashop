@@ -45,4 +45,19 @@ public class AdmItemRepository {
         return queryFactory.selectFrom(item)
                 .fetch();
     }
+
+    public List<Item> findAll(String category) {
+        QItem item = QItem.item;
+
+        return queryFactory.selectFrom(item)
+                .where(item.dtype.eq(category))
+                .fetch();
+    }
+
+    public List<Category> findCategories() {
+        QCategory category = QCategory.category;
+
+        return queryFactory.selectFrom(category)
+                .fetch();
+    }
 }

@@ -5,6 +5,21 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
+        <form name="dtypeForm" class="form-inline" >
+            <div class="form-group mx-sm-1 mb-2">
+                <label for="category">상품 분류</label>
+                <select name="categoryId" id="category" class="form-control" th:onchange="'javascript:changeCategory()'">
+                    <option value="">분류선택</option>
+                    <option th:each="category : ${categories}"
+                            th:if="${category.parent == null}"
+                            th:selected="${category.name == selectCategory}"
+                            th:value="${category.name}"
+                            th:text="${category.koName}" />
+                </select>
+            </div>
+        </form>
+    </div>
+    <div>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -36,4 +51,22 @@
     <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->
 </body>
+<script>
+    function changeCategory() {
+        var category = document.getElementById("category").value;
+
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/admin/items");
+
+        var input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", "category");
+        input.setAttribute("value", category);
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 </html>
