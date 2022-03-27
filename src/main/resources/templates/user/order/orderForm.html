@@ -11,6 +11,7 @@
             <select name="itemId" id="item" class="form-control">
                 <option value="">상품선택</option>
                 <option th:each="item : ${items}"
+                        th:if="${item.stockQuantity > 0}"
                         th:value="${item.id}"
                         th:selected="${item.id == itemId}"
                         th:text="${item.name}" />

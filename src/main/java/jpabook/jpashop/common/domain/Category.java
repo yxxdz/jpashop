@@ -18,6 +18,9 @@ public class Category {
 
     private String name;
 
+    @Column(name = "ko_name")
+    private String koName;
+
     @ManyToMany
     @JoinTable(name = "category_item",
         joinColumns = @JoinColumn(name = "category_id"),

@@ -1,5 +1,6 @@
 package jpabook.jpashop.user.service;
 
+import jpabook.jpashop.common.domain.Category;
 import jpabook.jpashop.common.domain.item.Item;
 import jpabook.jpashop.user.repository.UsrItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,14 @@ public class UsrItemService {
 
     public List<Item> findItems() {
         return itemRepository.findAll();
+    }
+
+    public List<Item> findItems(String category) {
+        return itemRepository.findAll(category);
+    }
+
+    public List<Category> findCategories() {
+        return itemRepository.findCategories();
     }
 
     public Item findOne(Long itemId) {
