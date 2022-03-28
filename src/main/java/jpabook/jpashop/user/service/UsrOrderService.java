@@ -1,5 +1,6 @@
 package jpabook.jpashop.user.service;
 
+import jpabook.jpashop.admin.repository.OrderSearch;
 import jpabook.jpashop.common.domain.*;
 import jpabook.jpashop.common.domain.item.Item;
 import jpabook.jpashop.user.repository.UsrItemRepository;
@@ -56,8 +57,8 @@ public class UsrOrderService {
     }
 
     // 개인 주문 목록
-    public List<Order> findOrders(Long memberId) {
-        return orderRepository.findOrders(memberId);
+    public List<Order> findOrders(Long memberId, OrderSearch orderSearch) {
+        return orderRepository.findOrders(memberId, orderSearch);
     }
 
 }

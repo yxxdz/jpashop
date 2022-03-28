@@ -1,5 +1,6 @@
 package jpabook.jpashop.user.controller;
 
+import jpabook.jpashop.admin.repository.OrderSearch;
 import jpabook.jpashop.common.domain.Order;
 import jpabook.jpashop.common.domain.item.Item;
 import jpabook.jpashop.user.service.UsrItemService;
@@ -60,7 +61,9 @@ public class UsrOrderController {
 
     // 회원 주문 목록
     @RequestMapping("/orders")
-    public String redirectOrderList(HttpServletRequest request, Model model) {
+    public String redirectOrderList( @ModelAttribute("orderSearch") OrderSearch orderSearch,
+                                     HttpServletRequest request,
+                                     Model model) {
 
         String str = "";
 
@@ -71,7 +74,7 @@ public class UsrOrderController {
 
         Long memberId = Long.parseLong(str);
 
-        List<Order> orders = orderService.findOrders(memberId);
+        List<Order> orders = orderService.findOrders(memberId, orderSearch);
         model.addAttribute("orders", orders);
 
         return "user/order/usrOrderList";
@@ -80,9 +83,10 @@ public class UsrOrderController {
     // 회원 주문 목록
     @PostMapping("/orders/{memberId}")
     public String orderList(@PathVariable("memberId") Long memberId,
-                               Model model) {
+                            @ModelAttribute("orderSearch") OrderSearch orderSearch,
+                            Model model) {
 
-        List<Order> orders = orderService.findOrders(memberId);
+        List<Order> orders = orderService.findOrders(memberId, orderSearch);
         model.addAttribute("orders", orders);
 
         return "user/order/usrOrderList";

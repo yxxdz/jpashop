@@ -2,6 +2,7 @@ package jpabook.jpashop.user.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpabook.jpashop.admin.repository.OrderSearch;
 import jpabook.jpashop.common.domain.*;
 import jpabook.jpashop.common.domain.Order;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,17 @@ public class UsrOrderRepository {
     public Order findOne(Long id) { return em.find(Order.class, id); }
 
     // 개인 주문 목록
-    public List<Order> findOrders(Long memberId) {
+    public List<Order> findOrders(Long memberId, OrderSearch orderSearch) {
         QOrder order = QOrder.order;
 
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(orderSearch.getOrderStatus() != null) {
+            builder.and(order.status.eq(orderSearch.getOrderStatus()));
+        }
+
         return queryFactory.selectFrom(order)
-                .where(order.member.id.eq(memberId))
+                .where(order.member.id.eq(memberId).and(builder))
                 .fetch();
     }
 }
