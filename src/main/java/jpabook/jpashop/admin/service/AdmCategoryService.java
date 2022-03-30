@@ -16,4 +16,7 @@ public class AdmCategoryService {
     private final AdmCategoryRepository categoryRepository;
 
     public List<Category> findCategories() { return categoryRepository.findAll();}
+
+    @Transactional
+    public void saveCategories (Category category) { categoryRepository.save(category); }
 }

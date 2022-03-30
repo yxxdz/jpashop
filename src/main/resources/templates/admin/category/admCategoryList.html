@@ -27,7 +27,7 @@
                 <th>카테고리</th>
                 <th>카테고리명</th>
                 <th>상위 카테고리</th>
-<!--                <td></td>-->
+                <td></td>
             </tr>
             </thead>
             <tbody>
@@ -35,7 +35,7 @@
                 <td th:text="${category.id}"></td>
                 <td th:text="${category.name}"></td>
                 <td th:text="${category.koName}"></td>
-                <td th:text="${category.parent?.id}"></td>
+                <td th:text="${category.parent?.name}"></td>
 <!--                <td>-->
 <!--                    <a href="#" th:href="@{/admin/items/{type}/{id}/edit (type=${item.dtype}, id=${item.id})}"-->
 <!--                       class="btn btn-primary" role="button">수정</a>-->

@@ -27,7 +27,7 @@ public class AdmItemController {
     }
 
     @GetMapping("/admin/items/new")
-    public String createBookForm(HttpServletRequest request, Model model) {
+    public String createForm(HttpServletRequest request, Model model) {
 
         String dtype = request.getParameter("dtype");
 
@@ -37,7 +37,7 @@ public class AdmItemController {
     }
 
     @PostMapping("/admin/items/new")
-    public String createBook(HttpServletRequest request, ItemForm form) {
+    public String createForm(HttpServletRequest request, ItemForm form) {
 
         String dtype = request.getParameter("dtype");
 

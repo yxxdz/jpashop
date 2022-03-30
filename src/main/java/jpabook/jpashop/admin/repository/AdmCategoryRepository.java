@@ -6,13 +6,23 @@ import jpabook.jpashop.common.domain.QCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class AdmCategoryRepository {
 
+    private final EntityManager em;
     private final JPAQueryFactory queryFactory;
+
+    public void save(Category category) {
+        if (category.getId() == null) {
+            em.persist(category);
+        } else {
+            em.merge(category);
+        }
+    }
 
     public List<Category> findAll() {
         QCategory category = QCategory.category;
