@@ -30,4 +30,12 @@ public class AdmCategoryRepository {
         return queryFactory.selectFrom(category)
                 .fetch();
     }
+
+    public Category findOne(Long categoryId) {
+        QCategory category = QCategory.category;
+
+        return queryFactory.selectFrom(category)
+                .where(category.id.eq(categoryId))
+                .fetchOne();
+    }
 }

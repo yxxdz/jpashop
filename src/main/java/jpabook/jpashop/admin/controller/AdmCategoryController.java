@@ -5,12 +5,10 @@ import jpabook.jpashop.common.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +29,7 @@ public class AdmCategoryController {
 
         List<Category> categories = categoryService.findCategories();
         model.addAttribute("categories", categories);
+        model.addAttribute("form", new CategoryForm());
         return "admin/category/createCategoryForm";
     }
 
@@ -46,6 +45,39 @@ public class AdmCategoryController {
             category.setParent(parent);
         }
         categoryService.saveCategories(category);
+
+        return "redirect:/admin/categories";
+    }
+
+    @GetMapping("/admin/categories/{categoryId}/edit")
+    public String updateCategoryForm(@PathVariable("categoryId") Long categoryId,
+                                 Model model) {
+
+        Category category = categoryService.findOne(categoryId);
+
+        CategoryForm form = new CategoryForm();
+        form.setId(category.getId());
+        form.setName(category.getName());
+        form.setKoName(category.getKoName());
+
+        if (Objects.isNull(category.getParent())) {
+            form.setParentId(null);
+        } else {
+            form.setParentId(category.getParent().getId());
+        }
+
+        List<Category> categories = categoryService.findCategories();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("form", form);
+        return "admin/category/updateCategoryForm";
+    }
+
+    @PostMapping("/admin/categories/{categoryId}/edit")
+    public String updateCategory(@PathVariable Long categoryId,
+                             @ModelAttribute("form") CategoryForm form) {
+
+        categoryService.updateCategory(categoryId, form.getName(), form.getKoName(), form.getParentId());
 
         return "redirect:/admin/categories";
     }

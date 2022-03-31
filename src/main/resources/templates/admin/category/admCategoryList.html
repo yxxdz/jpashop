@@ -36,10 +36,10 @@
                 <td th:text="${category.name}"></td>
                 <td th:text="${category.koName}"></td>
                 <td th:text="${category.parent?.name}"></td>
-<!--                <td>-->
-<!--                    <a href="#" th:href="@{/admin/items/{type}/{id}/edit (type=${item.dtype}, id=${item.id})}"-->
-<!--                       class="btn btn-primary" role="button">수정</a>-->
-<!--                </td>-->
+                <td>
+                    <a href="#" th:href="@{/admin/categories/{id}/edit (id=${category.id})}"
+                       class="btn btn-primary" role="button">수정</a>
+                </td>
             </tr>
             </tbody>
         </table>
